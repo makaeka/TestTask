@@ -17,7 +17,7 @@ import { Modal } from '../Modal/Modal';
 import { Input, TextArea } from '../common/Input/Input';
 import { PRIORITY_OPTIONS, PRIORITY_COLORS } from '@/utils/constants';
 import { useAppDispatch } from '@/store/hooks';
-import { updateCard, deleteCard, moveCard, reorderCards } from '@/store/slices/boardSlice';
+import { updateCard, deleteCard, reorderCards } from '@/store/slices/boardSlice';
 import { Priority } from '@/types';
 
 interface DragItem {
@@ -27,17 +27,21 @@ interface DragItem {
   type: string;
 }
 
+interface DropCollectedProps {
+  isOver: boolean;
+}
+
 export const Card: React.FC<CardProps> = ({ card, columnId, index }) => {
   const dispatch = useAppDispatch();
   const ref = useRef<HTMLDivElement>(null);
-  
+
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editedTitle, setEditedTitle] = useState(card.title);
   const [editedDescription, setEditedDescription] = useState(card.description || '');
   const [editedPriority, setEditedPriority] = useState<Priority | ''>(card.priority || '');
 
   // Drop для перетаскивания внутри колонки
-  const [{ isOver }, drop] = useDrop({
+  const [{ isOver }, drop] = useDrop<DragItem, void, DropCollectedProps>({
     accept: 'CARD',
     collect(monitor) {
       return {
@@ -57,7 +61,7 @@ export const Card: React.FC<CardProps> = ({ card, columnId, index }) => {
         return;
       }
 
-      // Если колонки разные — не обрабатываем здесь (это для moveCard)
+      // Если колонки разные — не обрабатываем здесь
       if (item.columnId !== columnId) {
         return;
       }
@@ -77,11 +81,13 @@ export const Card: React.FC<CardProps> = ({ card, columnId, index }) => {
       }
 
       // Меняем порядок
-      dispatch(reorderCards({
-        columnId,
-        fromIndex: dragIndex,
-        toIndex: hoverIndex,
-      }));
+      dispatch(
+        reorderCards({
+          columnId,
+          fromIndex: dragIndex,
+          toIndex: hoverIndex,
+        })
+      );
 
       // Обновляем индекс в item
       item.index = hoverIndex;
@@ -97,9 +103,6 @@ export const Card: React.FC<CardProps> = ({ card, columnId, index }) => {
     collect: (monitor) => ({
       isDragging: monitor.isDragging(),
     }),
-    end: (item, monitor) => {
-      // Если перетащили в другую колонку — сработает drop в Column.tsx
-    },
   });
 
   // Объединяем ref для drag и drop
@@ -164,7 +167,7 @@ export const Card: React.FC<CardProps> = ({ card, columnId, index }) => {
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#1E293B', fontSize: '14px' }}>
               Заголовок *
             </label>
             <Input
@@ -174,7 +177,7 @@ export const Card: React.FC<CardProps> = ({ card, columnId, index }) => {
             />
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#1E293B', fontSize: '14px' }}>
               Описание
             </label>
             <TextArea
@@ -184,7 +187,7 @@ export const Card: React.FC<CardProps> = ({ card, columnId, index }) => {
             />
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 500 }}>
+            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 600, color: '#1E293B', fontSize: '14px' }}>
               Приоритет
             </label>
             <select
@@ -199,6 +202,8 @@ export const Card: React.FC<CardProps> = ({ card, columnId, index }) => {
                 fontFamily: 'Inter, sans-serif',
                 outline: 'none',
                 color: '#1E293B',
+                backgroundColor: 'white',
+                cursor: 'pointer',
               }}
             >
               <option value="">Нет</option>
