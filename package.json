@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Kanban board application with drag and drop",
   "main": "index.js",
+  "homepage": "https://github.com/makaeka/TestTask",
   "scripts": {
     "start": "webpack serve --mode development --open",
     "build": "webpack --mode production",
@@ -12,6 +13,7 @@
     "prepare": "husky install",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
+
   },
   "keywords": [
     "kanban",
@@ -49,7 +51,7 @@
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "gh-pages": "^6.0.0",
+    "gh-pages": "^6.3.0",
     "html-webpack-plugin": "^5.6.7",
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
