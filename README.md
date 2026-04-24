@@ -1,6 +1,6 @@
 # Kanban Dashboard
 
-👉 [Перейти на сайт](https://makaeka-testtask.netlify.app/)
+👉 [Перейти на сайт](https://69eab0bad0506aaac2c414f6--tangerine-pixie-57f464.netlify.app/)
 
 ## 📋 Описание проекта
 
